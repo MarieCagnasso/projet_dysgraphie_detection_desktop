@@ -83,7 +83,7 @@ public class PageDeuxiemeLettre extends javax.swing.JFrame {
      */
     public PageDeuxiemeLettre(Trace tModele, int nbE) throws Exception {
         this.getContentPane().setBackground(Color.decode("#F69679"));
-        this.nbFichiers = countFiles("C:/ProjetDysgraphie-master-" + version + "/Dataset");
+        this.nbFichiers = countFiles("./Dataset");
         modele = tModele;
         initComponents();
         jButtonVoir.setForeground(Color.WHITE);
@@ -108,7 +108,7 @@ public class PageDeuxiemeLettre extends javax.swing.JFrame {
 
     public PageDeuxiemeLettre() throws Exception {
         this.getContentPane().setBackground(Color.decode("#F69679"));
-        this.nbFichiers = countFiles("C:/ProjetDysgraphie-master-" + version + "/Dataset");
+        this.nbFichiers = countFiles("./Dataset");
         initComponents();
         jButtonVoir.setForeground(Color.WHITE);
         jButtonVoir.setBackground(Color.decode("#F04248"));
@@ -212,7 +212,7 @@ public class PageDeuxiemeLettre extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(PagePremiereLettre.class.getName()).log(Level.SEVERE, null, ex);
         }
-        nomFichier = ("C:/ProjetDysgraphie-master-" + version + "/Dataset/" + nomFichier(nbFichiers));
+        nomFichier = ("./Dataset/" + nomFichier(nbFichiers));
     }
 
 //    /**
