@@ -1,4 +1,4 @@
-package models;
+package projetdysgraphie.models;
 
 import java.awt.Color;
 import java.awt.Graphics;

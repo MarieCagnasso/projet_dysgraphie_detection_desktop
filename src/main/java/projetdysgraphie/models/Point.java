@@ -1,4 +1,4 @@
-package models;
+package projetdysgraphie.models;
 
 public class Point implements Comparable {
     private int x;

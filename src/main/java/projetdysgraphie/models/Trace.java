@@ -1,4 +1,4 @@
-package models;
+package projetdysgraphie.models;
 
 import java.io.IOException;
 import java.util.ArrayList;

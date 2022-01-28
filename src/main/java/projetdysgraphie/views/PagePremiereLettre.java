@@ -1,10 +1,10 @@
-package views;
+package projetdysgraphie.views;
 
-import models.Courbe;
-import models.Point;
-import models.PolyLine;
-import models.Trace;
-import models.Tableau;
+import projetdysgraphie.models.Courbe;
+import projetdysgraphie.models.Point;
+import projetdysgraphie.models.PolyLine;
+import projetdysgraphie.models.Trace;
+import projetdysgraphie.models.Tableau;
 
 import java.awt.Color;
 import java.awt.Component;
