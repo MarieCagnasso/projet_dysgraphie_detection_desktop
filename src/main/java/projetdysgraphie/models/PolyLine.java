@@ -1,4 +1,4 @@
-package projetdysgraphie;
+package models;
 
 import java.awt.Graphics;
 import java.util.ArrayList;

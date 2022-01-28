@@ -1,15 +1,12 @@
-package projetdysgraphie;
+package models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import static java.lang.Math.abs;
-import static java.nio.file.Files.list;
-import static java.rmi.Naming.list;
+
 import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
