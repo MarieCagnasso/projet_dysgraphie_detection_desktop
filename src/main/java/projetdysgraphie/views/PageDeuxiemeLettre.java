@@ -1,4 +1,10 @@
-package projetdysgraphie;
+package projetdysgraphie.views;
+
+import projetdysgraphie.models.Courbe;
+import projetdysgraphie.models.Point;
+import projetdysgraphie.models.PolyLine;
+import projetdysgraphie.models.Trace;
+import projetdysgraphie.models.Tableau;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,12 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.BufferedInputStream;
 import javax.swing.JPanel;
-import javax.swing.JFileChooser;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,9 +25,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import static projetdysgraphie.PagePremiereLettre.countFiles;
-import static projetdysgraphie.PagePremiereLettre.nomFichier;
 
 
 public class PageDeuxiemeLettre extends javax.swing.JFrame {

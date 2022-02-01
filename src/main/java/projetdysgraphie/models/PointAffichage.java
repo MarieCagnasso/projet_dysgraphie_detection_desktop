@@ -1,4 +1,4 @@
-package projetdysgraphie;
+package projetdysgraphie.models;
 
 /**
  * Représentation de la classe Point spécifiquement utilisée pour l'affichage de points.

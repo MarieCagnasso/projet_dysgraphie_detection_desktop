@@ -1,4 +1,4 @@
-package projetdysgraphie;
+package projetdysgraphie.models;
 
 public class PointException extends Exception {
 

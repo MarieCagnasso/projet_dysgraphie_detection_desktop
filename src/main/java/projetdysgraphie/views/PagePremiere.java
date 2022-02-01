@@ -1,17 +1,15 @@
-package projetdysgraphie;
+package projetdysgraphie.views;
+
+import projetdysgraphie.models.Point;
+import projetdysgraphie.models.PolyLine;
+import projetdysgraphie.models.Trace;
+import projetdysgraphie.models.Tableau;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import static java.awt.SystemColor.window;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import java.io.File;
@@ -19,18 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JColorChooser;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 
 public class PagePremiere extends javax.swing.JFrame {
 

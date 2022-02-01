@@ -1,11 +1,8 @@
-package projetdysgraphie;
+package projetdysgraphie.models;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Trace {
 
