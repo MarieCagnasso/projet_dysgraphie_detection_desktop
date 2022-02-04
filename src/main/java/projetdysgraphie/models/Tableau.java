@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import static java.lang.Math.abs;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,7 +20,7 @@ import org.apache.poi.ss.usermodel.Row;
 public class Tableau {
 
     private String version = "v.1.14";
-
+    private double pixelToCm = 0.02646;
     private static HSSFCellStyle createStyleForTitle(HSSFWorkbook workbook) {
         HSSFFont font = workbook.createFont();
         font.setBold(true);
@@ -53,16 +52,16 @@ public class Tableau {
             // X/100mm
             cell = row.createCell(2, CellType.STRING);
             //cell.setCellValue("X/100mm");
-            cell.setCellValue("X");
+            cell.setCellValue("X (cm)");
             cell.setCellStyle(style);
             // Y/100mm
             cell = row.createCell(3, CellType.STRING);
             //cell.setCellValue("Y/100mm");
-            cell.setCellValue("Y");
+            cell.setCellValue("Y (cm)");
             cell.setCellStyle(style);
             // Interv ms
             cell = row.createCell(4, CellType.STRING);
-            cell.setCellValue("Interv ms");
+            cell.setCellValue("Interv (ms)");
             cell.setCellStyle(style);
             // Time ms
             cell = row.createCell(5, CellType.STRING);
@@ -79,20 +78,26 @@ public class Tableau {
             // Az
             cell = row.createCell(8, CellType.STRING);
             //cell.setCellValue("Az");
-            cell.setCellValue("Distance");
+            cell.setCellValue("Distance (cm)");
             cell.setCellStyle(style);
             // Al
             cell = row.createCell(9, CellType.STRING);
             //cell.setCellValue("Al");
-            cell.setCellValue("Vitesse (10-3)");
+            cell.setCellValue("Vitesse (cm/ms)");
             cell.setCellStyle(style);
             cell = row.createCell(10, CellType.STRING);
-            cell.setCellValue("Accélération (10-3)");
+            cell.setCellValue("Accélération (cm/ms-2)");
             cell.setCellStyle(style);
             cell = row.createCell(11, CellType.STRING);
             //cell.setCellValue("Al");
             cell.setCellValue("Pics d'accélération");
             cell.setCellStyle(style);
+            
+            //Liste des coordonnées y dans le bon plan 
+            for(Point p : listPoint){
+                p.setY((int) (p.getY()*-1));    
+            }
+            
             // Data
             for (int i = 0; i < listPoint.size(); i++) {
                 rownum++;
@@ -106,10 +111,10 @@ public class Tableau {
                 cell.setCellValue(listPoint.get(i).getNum());
                 // X (C)
                 cell = row.createCell(2, CellType.NUMERIC);
-                cell.setCellValue(listPoint.get(i).getX());
+                cell.setCellValue(listPoint.get(i).getX()*pixelToCm);
                 // Y (D)
                 cell = row.createCell(3, CellType.NUMERIC);
-                cell.setCellValue(listPoint.get(i).getY());
+                cell.setCellValue(listPoint.get(i).getY()*pixelToCm);
                 // Interv ms (E)
                 cell = row.createCell(4, CellType.NUMERIC);
                 cell.setCellValue(listPoint.get(i).getInterval());
@@ -132,18 +137,32 @@ public class Tableau {
                 // Distance (I)
                 if (rownum > 1) {
                     double dist = listPoint.get(i).distanceAvec(listPoint.get(i - 1));
+                    
+                    dist=dist*pixelToCm;//Convertion en cm
+                    
                     cell = row.createCell(8, CellType.NUMERIC);
                     cell.setCellValue(dist);
-                }
                 // Vitesse (J)
-                if (rownum > 1) {
-                    double vit = 1000 * listPoint.get(i).distanceAvec(listPoint.get(i - 1)) / (listPoint.get(i).getInterval());
+                    //double vit = 1000 * dist / (listPoint.get(i).getInterval());
+                    int deriveTemps= listPoint.get(i).getTime()-listPoint.get(i-1).getTime();
+                    double vit = dist / deriveTemps;
                     cell = row.createCell(9, CellType.NUMERIC);
                     cell.setCellValue(vit);
                 }
                 // Accélération (K)
                 if (rownum > 2) {
-                    double acc = (listPoint.get(i - 2).vitesseEntre(listPoint.get(i - 1)) - listPoint.get(i - 1).vitesseEntre(listPoint.get(i))) * 1000 / listPoint.get(i - 2).IntervalleEntre(listPoint.get(i));
+                    int deriveTemps1= listPoint.get(i).getTime()-listPoint.get(i-1).getTime();
+                    double dist1 = listPoint.get(i).distanceAvec(listPoint.get(i - 1));
+                    //double vit1 = dist1 / (listPoint.get(i).getInterval());
+                    double vit1 = dist1 / deriveTemps1;
+
+                    int deriveTemps2= listPoint.get(i-1).getTime()-listPoint.get(i-2).getTime();
+                    double dist2 = listPoint.get(i-1).distanceAvec(listPoint.get(i - 2));
+                    //double vit2 = dist2 / (listPoint.get(i-1).getInterval());
+                    //double acc = (listPoint.get(i - 2).vitesseEntre(listPoint.get(i - 1)) - listPoint.get(i - 1).vitesseEntre(listPoint.get(i))) * 1000 / listPoint.get(i - 2).IntervalleEntre(listPoint.get(i));
+                    double vit2 = dist2 / deriveTemps2;
+
+                    double acc = (vit1-vit2)/(deriveTemps1-deriveTemps2);
                     int nbP = 0;
                     cell = row.createCell(10, CellType.NUMERIC);
                     cell.setCellValue(acc);
