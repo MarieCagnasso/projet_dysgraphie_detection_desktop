@@ -28,6 +28,7 @@ public class Tableau {
         style.setFont(font);
         return style;
     }
+    private long tempsDebut; 
 
     public Tableau(String fileName, String sheetName, ArrayList<Point> listPoint) {
 
@@ -97,6 +98,7 @@ public class Tableau {
             for(Point p : listPoint){
                 p.setY((int) (p.getY()*-1));    
             }
+            tempsDebut = listPoint.get(0).getTime();
             
             // Data
             for (int i = 0; i < listPoint.size(); i++) {
@@ -120,7 +122,7 @@ public class Tableau {
                 cell.setCellValue(listPoint.get(i).getInterval());
                 // Time ms (F)
                 cell = row.createCell(5, CellType.NUMERIC);
-                cell.setCellValue(listPoint.get(i).getTime());
+                cell.setCellValue(listPoint.get(i).getTime()-tempsDebut);
                 // P (H)
                 cell = row.createCell(7, CellType.NUMERIC);
                 //METTRE LA VALEUR DE LA PRESSION
