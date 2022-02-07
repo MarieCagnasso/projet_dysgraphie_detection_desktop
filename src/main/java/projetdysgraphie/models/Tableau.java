@@ -93,6 +93,10 @@ public class Tableau {
             //cell.setCellValue("Al");
             cell.setCellValue("Pics d'accélération");
             cell.setCellStyle(style);
+            cell = row.createCell(12, CellType.STRING);
+            cell.setCellValue("Jerk");
+            cell.setCellStyle(style);
+
             
             //Liste des coordonnées y dans le bon plan 
             for(Point p : listPoint){
@@ -145,40 +149,65 @@ public class Tableau {
                     cell = row.createCell(8, CellType.NUMERIC);
                     cell.setCellValue(dist);
                 // Vitesse (J)
-                    //double vit = 1000 * dist / (listPoint.get(i).getInterval());
-                    int deriveTemps= listPoint.get(i).getTime()-listPoint.get(i-1).getTime();
+                    //double vit = 1000 * dist / (listPoint.get(i).getInterval()); ancienne formule
+                    int deriveTemps= listPoint.get(i).getInterval() ;
                     double vit = dist / deriveTemps;
                     cell = row.createCell(9, CellType.NUMERIC);
                     cell.setCellValue(vit);
                 }
                 // Accélération (K)
                 if (rownum > 2) {
+                    //double acc = (listPoint.get(i - 2).vitesseEntre(listPoint.get(i - 1)) - listPoint.get(i - 1).vitesseEntre(listPoint.get(i))) * 1000 / listPoint.get(i - 2).IntervalleEntre(listPoint.get(i)); ancienne formule
                     int deriveTemps1= listPoint.get(i).getTime()-listPoint.get(i-1).getTime();
                     double dist1 = listPoint.get(i).distanceAvec(listPoint.get(i - 1));
-                    //double vit1 = dist1 / (listPoint.get(i).getInterval());
                     double vit1 = dist1 / deriveTemps1;
 
                     int deriveTemps2= listPoint.get(i-1).getTime()-listPoint.get(i-2).getTime();
                     double dist2 = listPoint.get(i-1).distanceAvec(listPoint.get(i - 2));
-                    //double vit2 = dist2 / (listPoint.get(i-1).getInterval());
-                    //double acc = (listPoint.get(i - 2).vitesseEntre(listPoint.get(i - 1)) - listPoint.get(i - 1).vitesseEntre(listPoint.get(i))) * 1000 / listPoint.get(i - 2).IntervalleEntre(listPoint.get(i));
                     double vit2 = dist2 / deriveTemps2;
 
                     double acc = (vit1-vit2)/(deriveTemps1-deriveTemps2);
-                    int nbP = 0;
+                    
                     cell = row.createCell(10, CellType.NUMERIC);
                     cell.setCellValue(acc);
-                    // Pics
+                    
+                    // Pics(L)
+                    int nbP = 0;
                     if (acc > 15.0) {
                         nbP = 1;
-                    } else {
-                        if (acc < -15.0) {
+                    } 
+                    if (acc < -15.0) {
                             nbP = -1;
                         }
-                    }
+                    
                     cell = row.createCell(11, CellType.NUMERIC);
                     cell.setCellValue(nbP);
+                    
                 }
+                
+                //Jerk (M)
+                if (rownum >3){
+                    double d1 = listPoint.get(i-2).distanceAvec(listPoint.get(i - 3));
+                    double d2=listPoint.get(i-1).distanceAvec(listPoint.get(i - 2));
+                    double d3=listPoint.get(i).distanceAvec(listPoint.get(i - 1)) ;
+                            
+                    double v1=d1/ (listPoint.get(i-2).getInterval());
+                    double v2=d2 / (listPoint.get(i-1).getInterval());
+                    double v3=d3/ (listPoint.get(i).getInterval());
+                    
+                    int deriveTemps1 = listPoint.get(i-2).getTime()-listPoint.get(i-3).getTime();
+                    int deriveTemps2=listPoint.get(i-1).getTime()-listPoint.get(i-2).getTime();
+                    int deriveTemps3=listPoint.get(i).getTime()-listPoint.get(i-1).getTime();
+  
+                    double a1=(v2-v1)/(deriveTemps2-deriveTemps1);
+                    double a2=(v3-v2)/(deriveTemps3-deriveTemps2);
+         
+                    double jerk =(a2-a1)/((deriveTemps3-deriveTemps2)-(deriveTemps2-deriveTemps1));
+                    
+                    cell = row.createCell(12, CellType.NUMERIC);
+                    cell.setCellValue(jerk);
+                }
+
             }
             File file = new File("./Dataset/" + fileName);
             file.getParentFile().mkdirs();
