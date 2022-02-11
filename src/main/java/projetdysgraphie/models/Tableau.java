@@ -96,14 +96,39 @@ public class Tableau {
             cell = row.createCell(12, CellType.STRING);
             cell.setCellValue("Jerk");
             cell.setCellStyle(style);
+            
+            cell = row.createCell(13, CellType.STRING);
+            cell.setCellValue("Moyenne vitesse");
+            cell.setCellStyle(style);
 
+            cell = row.createCell(14, CellType.STRING);
+            cell.setCellValue("Ecart-Type vitesse");
+            cell.setCellStyle(style);
+
+            cell = row.createCell(15, CellType.STRING);
+            cell.setCellValue("Moyenne accélération");
+            cell.setCellStyle(style);            
+            
+            cell = row.createCell(16, CellType.STRING);
+            cell.setCellValue("Ecart-Type accélération");
+            cell.setCellStyle(style);
+            
+            cell = row.createCell(17, CellType.STRING);
+            cell.setCellValue("Moyenne Jerk");
+            cell.setCellStyle(style);            
+            
+            cell = row.createCell(18, CellType.STRING);
+            cell.setCellValue("Ecart-Type Jerk");
+            cell.setCellStyle(style);
             
             //Liste des coordonnées y dans le bon plan 
             for(Point p : listPoint){
                 p.setY((int) (p.getY()*-1));    
             }
             tempsDebut = listPoint.get(0).getTime();
-            
+            ArrayList<Double> vitesses = new ArrayList<>();
+            ArrayList<Double> accelerations = new ArrayList<>();
+            ArrayList<Double> jerks = new ArrayList<>();
             // Data
             for (int i = 0; i < listPoint.size(); i++) {
                 rownum++;
@@ -154,6 +179,10 @@ public class Tableau {
                     double vit = dist / deriveTemps;
                     cell = row.createCell(9, CellType.NUMERIC);
                     cell.setCellValue(vit);
+
+                    if((vit>0 || vit<0) && vit!=Double.POSITIVE_INFINITY && vit!=Double.NEGATIVE_INFINITY){
+                        vitesses.add(vit);
+                    }
                 }
                 // Accélération (K)
                 if (rownum > 2) {
@@ -170,7 +199,10 @@ public class Tableau {
                     
                     cell = row.createCell(10, CellType.NUMERIC);
                     cell.setCellValue(acc);
-                    
+                    //if( && acc!=Double.NaN)
+                    if( (acc>0 || acc<0) && acc!=Double.POSITIVE_INFINITY && acc!=Double.NEGATIVE_INFINITY){ 
+                        accelerations.add(acc);
+                    }
                     // Pics(L)
                     int nbP = 0;
                     if (acc > 15.0) {
@@ -206,9 +238,33 @@ public class Tableau {
                     
                     cell = row.createCell(12, CellType.NUMERIC);
                     cell.setCellValue(jerk);
+                    if((jerk>0 || jerk<0) && jerk!=Double.POSITIVE_INFINITY && jerk!=Double.NEGATIVE_INFINITY )
+                    jerks.add(jerk);
                 }
 
             }
+            //Calcul des moyennes et écart-type 
+            row = sheet.createRow(1);
+            //Vitesse
+            cell = row.createCell(13, CellType.NUMERIC);
+            cell.setCellValue(moyenne(vitesses));
+            cell = row.createCell(14, CellType.NUMERIC);
+            cell.setCellValue(ecartType(vitesses));
+            //Accélération
+            cell = row.createCell(15, CellType.NUMERIC);
+            cell.setCellValue(moyenne(accelerations));
+
+            cell = row.createCell(16, CellType.NUMERIC);
+            cell.setCellValue(ecartType(accelerations));
+            System.out.println(accelerations);
+            //Jerk
+            cell = row.createCell(17, CellType.NUMERIC);
+            cell.setCellValue(moyenne(jerks));
+
+            cell = row.createCell(18, CellType.NUMERIC);
+            cell.setCellValue(ecartType(jerks));
+            
+            
             File file = new File("./Dataset/" + fileName);
             file.getParentFile().mkdirs();
             outFile = new FileOutputStream(file);
@@ -225,5 +281,24 @@ public class Tableau {
                 Logger.getLogger(Tableau.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    
+    
+    private double moyenne(ArrayList<Double> list ){
+        double S=0;
+        for(double l:list){
+            S=S+l;
+        }
+        return S/list.size();
+    }
+    
+    private double ecartType(ArrayList<Double> list){
+        double S=0;
+        double m=moyenne(list);
+        for(double l : list){
+            S=S+Math.pow(l-m,2);
+        }
+        return Math.sqrt(S/list.size());
     }
 }
